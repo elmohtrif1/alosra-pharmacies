@@ -45,6 +45,7 @@ export function useProducts(activeOnly = true) {
 
   const load = async () => {
     setLoading(true);
+
     if (!supabaseConfigured || !supabase) {
       setProducts(hardcoded.map(hardcodedToProduct));
       setLoading(false);
@@ -61,17 +62,46 @@ export function useProducts(activeOnly = true) {
     if (activeOnly) q = q.eq("is_active", true);
 
     const { data, error: err } = await q;
+
     if (err) {
       console.error("[useProducts]", err);
       setError(err.message);
       setProducts(hardcoded.map(hardcodedToProduct));
     } else {
-      setProducts((data ?? []) as unknown as Product[]);
+      const { data: ratings } = await supabase!
+        .from("product_ratings")
+        .select("product_id, rating");
+
+      const productsWithRatings = (data ?? []).map((product: any) => {
+        const productRatings =
+          ratings?.filter((r: any) => r.product_id === product.id) ?? [];
+
+        const ratingCount = productRatings.length;
+
+        const averageRating =
+          ratingCount > 0
+            ? productRatings.reduce(
+                (sum: number, r: any) => sum + r.rating,
+                0
+              ) / ratingCount
+            : 0;
+
+        return {
+          ...product,
+          average_rating: averageRating,
+          rating_count: ratingCount,
+        };
+      });
+
+      setProducts(productsWithRatings as Product[]);
     }
+
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, [activeOnly]);
+  useEffect(() => {
+    load();
+  }, [activeOnly]);
 
   return { products, loading, error, reload: load };
 }

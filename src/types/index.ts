@@ -40,6 +40,8 @@ export interface Product {
   meta_description?: string;
   created_at?: string;
   updated_at?: string;
+  average_rating?: number;
+  rating_count?: number;
 }
 
 export interface Profile {

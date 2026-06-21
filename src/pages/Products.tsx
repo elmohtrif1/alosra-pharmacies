@@ -46,6 +46,17 @@ function ProductCard({ product }: { product: Product }) {
         {cat && <span className="text-xs text-gray-400">{cat}</span>}
         {product.brand && <span className="text-xs text-gray-500 font-medium">{product.brand}</span>}
         <h3 className="font-bold text-gray-800 text-sm leading-snug">{product.name}</h3>
+        <div className="flex items-center gap-1 text-xs mt-1">
+  <span className="text-yellow-500">⭐</span>
+
+  <span className="font-semibold text-gray-700">
+    {(product.average_rating ?? 0).toFixed(1)}
+  </span>
+
+  <span className="text-gray-400">
+     ({product.rating_count ?? 0})
+   </span>
+  </div>
         {product.unit && <span className="text-xs text-gray-400">{product.unit}</span>}
         <div className="flex items-center justify-between mt-2">
           <a

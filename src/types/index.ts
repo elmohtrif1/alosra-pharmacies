@@ -67,7 +67,7 @@ export interface DashboardStats {
   activeProducts: number;
   featuredProducts: number;
   totalRatings: number;
-  recentRatings: (Rating & { product_name?: string })[];
+  recentRatings: (Rating & { product_name?: string; product_sku?: string })[];
 }
 
 export type ProductFormData = {

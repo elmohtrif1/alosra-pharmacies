@@ -257,10 +257,6 @@ export function AdminProductForm() {
                 <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} className="w-4 h-4 rounded" />
                 <span className="text-sm font-medium text-slate-700">منتج نشط (يظهر في الموقع)</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.is_featured} onChange={(e) => set("is_featured", e.target.checked)} className="w-4 h-4 rounded" />
-                <span className="text-sm font-medium text-slate-700">منتج مميز</span>
-              </label>
             </div>
           </div>
         </Section>

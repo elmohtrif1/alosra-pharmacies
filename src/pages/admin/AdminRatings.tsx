@@ -4,7 +4,11 @@ import { supabase } from "@/lib/supabase";
 import type { Rating } from "@/types";
 import { AdminLayout } from "./AdminLayout";
 
-type RatingWithProduct = Rating & { product_name?: string };
+type RatingWithProduct = Rating & {
+  product_name?: string;
+  product_sku?: string;
+  products?: { name: string; sku?: string } | null;
+};
 
 export function AdminRatings() {
   const [ratings, setRatings] = useState<RatingWithProduct[]>([]);
@@ -13,11 +17,32 @@ export function AdminRatings() {
 
   const load = async () => {
     if (!supabase) return;
-    const { data } = await supabase
+    const { data: ratingsData } = await supabase
       .from("product_ratings")
       .select("id, product_id, name, rating, comment, created_at")
       .order("created_at", { ascending: false });
-    setRatings((data ?? []) as RatingWithProduct[]);
+
+    const rows = (ratingsData ?? []) as Rating[];
+
+    const productIds = [...new Set(rows.map((r) => r.product_id).filter(Boolean))];
+    let productMap: Record<number, { name: string; sku?: string }> = {};
+
+    if (productIds.length > 0) {
+      const { data: productsData } = await supabase
+        .from("products")
+        .select("id, name, sku")
+        .in("id", productIds);
+      for (const p of (productsData ?? []) as { id: number; name: string; sku?: string }[]) {
+        productMap[p.id] = { name: p.name, sku: p.sku };
+      }
+    }
+
+    setRatings(
+      rows.map((r) => ({
+        ...r,
+        products: productMap[r.product_id] ?? null,
+      }))
+    );
     setLoading(false);
   };
 
@@ -32,7 +57,9 @@ export function AdminRatings() {
   const filtered = ratings.filter((r) =>
     !search ||
     (r.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
-    (r.comment ?? "").toLowerCase().includes(search.toLowerCase())
+    (r.comment ?? "").toLowerCase().includes(search.toLowerCase()) ||
+    (r.products?.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
+    (r.products?.sku ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -66,9 +93,16 @@ export function AdminRatings() {
               {filtered.map((r) => (
                 <li key={r.id} className="px-5 py-4 flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="font-semibold text-sm text-slate-800">{r.name ?? "زائر"}</span>
-                      <span className="text-xs text-slate-400">منتج #{r.product_id}</span>
+                      <span className="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full">
+                        {r.products?.name ?? `منتج #${r.product_id}`}
+                      </span>
+                      {r.products?.sku && (
+                        <span className="text-xs bg-slate-100 text-slate-500 font-mono px-2 py-0.5 rounded-full">
+                          {r.products.sku}
+                        </span>
+                      )}
                       <div className="flex items-center gap-0.5 text-amber-400">
                         {[1,2,3,4,5].map((s) => (
                           <Star key={s} className={`w-3 h-3 ${s <= r.rating ? "fill-amber-400" : "text-slate-200"}`} />

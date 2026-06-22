@@ -7,7 +7,7 @@ import { useProduct } from "@/hooks/useProduct";
 import { useProductRatings } from "@/hooks/useProductRatings";
 import type { ProductImage } from "@/types";
 
-const WHATSAPP_NUMBER = "201220218685";
+const WHATSAPP_NUMBER = "201275006840";
 
 function StarInput({ value, onChange, readonly = false }: { value: number; onChange?: (v: number) => void; readonly?: boolean }) {
   const [hover, setHover] = useState(0);
@@ -114,7 +114,9 @@ export function ProductDetail() {
     );
   }
 
-  const waMessage = encodeURIComponent(`أريد طلب: ${product.name}`);
+  const waMessage = encodeURIComponent(
+    `أريد طلب: ${product.name}${product.sku ? ` - كود المنتج: ${product.sku}` : ""}`
+  );
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
 
   const sortedImages = [...(product.product_images ?? [])].sort((a, b) => {
@@ -145,7 +147,23 @@ export function ProductDetail() {
   return (
     <div className="min-h-screen bg-white text-gray-800" dir="rtl">
       <Navbar />
-      <main className="container mx-auto px-4 max-w-5xl py-6">
+
+      {/* Sticky mobile WhatsApp bar */}
+      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-3">
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-xl text-base active:scale-95 transition-transform"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-white flex-shrink-0">
+            <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.736 5.471 2.024 7.773L0 32l8.469-2.001A15.937 15.937 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.273 19.372c-.398-.199-2.355-1.162-2.72-1.294-.365-.133-.631-.199-.897.199s-1.029 1.294-1.261 1.56c-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.201-1.977-1.183-1.056-1.981-2.36-2.213-2.758-.232-.399-.025-.614.174-.812.179-.178.398-.465.597-.698.199-.232.265-.398.398-.664.133-.265.066-.498-.033-.697-.1-.199-.897-2.162-1.229-2.96-.323-.777-.652-.672-.897-.684l-.764-.013c-.266 0-.698.1-1.063.498-.365.398-1.395 1.362-1.395 3.325 0 1.962 1.428 3.858 1.627 4.124.199.265 2.811 4.291 6.81 6.017.952.411 1.695.656 2.274.84.956.304 1.825.261 2.513.158.767-.114 2.355-.963 2.688-1.893.333-.93.333-1.727.233-1.893-.099-.165-.365-.265-.763-.465z" />
+          </svg>
+          اطلب عبر واتساب
+        </a>
+      </div>
+
+      <main className="container mx-auto px-4 max-w-5xl py-6 pb-28 md:pb-6">
         <div className="flex justify-end mb-6">
           <button onClick={() => navigate("/products")} className="flex items-center gap-1 text-primary text-sm hover:underline">
             العودة للمنتجات
@@ -237,7 +255,7 @@ export function ProductDetail() {
                 <h3 className="font-bold text-gray-800 mb-4">أضف تقييمك</h3>
                 <div className="mb-3">
                   <label className="block text-sm text-gray-500 mb-1">اسمك</label>
-                  <input type="text" value={reviewerName} onChange={(e) => setReviewerName(e.target.value)} placeholder="ادخل اسمك..." className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-right" dir="rtl" />
+                  <input type="text" value={reviewerName} onChange={(e) => setReviewerName(e.target.value)} placeholder="ادخل اسمك..." className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-right" dir="rtl" />
                 </div>
                 <div className="mb-3">
                   <label className="block text-sm text-gray-500 mb-1">تقييمك</label>
@@ -245,7 +263,7 @@ export function ProductDetail() {
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm text-gray-500 mb-1">تعليقك (اختياري)</label>
-                  <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} placeholder="شاركنا رأيك في المنتج..." rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none text-right" dir="rtl" />
+                  <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} placeholder="شاركنا رأيك في المنتج..." rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none text-right" dir="rtl" />
                 </div>
                 <button type="submit" disabled={!rating || submitting} className="flex items-center justify-center gap-2 w-full bg-primary disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 px-6 rounded-xl transition-colors hover:bg-primary/90 text-sm">
                   {submitting ? "جاري الإرسال..." : "إرسال التقييم 📨"}

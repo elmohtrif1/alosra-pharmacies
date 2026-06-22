@@ -7,14 +7,16 @@ import { useProducts, getPrimaryImage, getCategoryName } from "@/hooks/useProduc
 import { useCategories } from "@/hooks/useCategories";
 import type { Product } from "@/types";
 
-const WHATSAPP_NUMBER = "201220218685";
+const WHATSAPP_NUMBER = "201275006840";
 
 function ProductCard({ product }: { product: Product }) {
   const [, navigate] = useLocation();
   const image = getPrimaryImage(product);
   const cat = getCategoryName(product);
 
-  const waMessage = encodeURIComponent(`أريد طلب: ${product.name}`);
+  const waMessage = encodeURIComponent(
+    `أريد طلب: ${product.name}${product.sku ? ` - كود المنتج: ${product.sku}` : ""}`
+  );
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
 
   return (
@@ -116,18 +118,18 @@ export function Products() {
                   placeholder="ابحث عن منتج..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pr-9 pl-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-right"
+                  className="w-full pr-9 pl-4 py-2.5 rounded-xl border border-gray-200 bg-white text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-right"
                   dir="rtl"
                 />
               </div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide justify-start md:justify-center" style={{ scrollbarWidth: "none" }}>
               {categoryNames.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
+                  className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all whitespace-nowrap flex-shrink-0 ${
                     activeCategory === cat
                       ? "bg-primary text-white border-primary shadow"
                       : "bg-white text-gray-600 border-gray-200 hover:border-primary/40"

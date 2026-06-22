@@ -48,9 +48,13 @@ export function Navbar() {
 
   return (
     <>
-      <div className="bg-primary text-primary-foreground py-1 px-4 text-sm text-left font-medium">
-        <div className="container mx-auto">
-          اتصل بنا: <a href="tel:01220218685" className="underline hover:text-white/80 transition-colors" dir="ltr">012 20218685</a> | كل أيام الأسبوع 24 ساعة
+      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-sm font-medium">
+        <div className="container mx-auto flex items-center justify-between md:justify-start gap-2">
+          <span className="hidden md:inline">اتصل بنا:</span>
+          <a href="tel:01275006840" className="underline hover:text-white/80 transition-colors font-bold" dir="ltr">012 75006840</a>
+          <span className="hidden md:inline text-white/60">|</span>
+          <span className="hidden md:inline">كل أيام الأسبوع 24 ساعة</span>
+          <span className="md:hidden text-white/80 text-xs">متاحون 24 ساعة</span>
         </div>
       </div>
 

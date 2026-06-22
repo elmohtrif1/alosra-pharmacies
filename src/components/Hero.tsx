@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
@@ -22,18 +23,28 @@ export function Hero() {
           <p className="text-lg md:text-xl lg:text-2xl text-blue-100 mb-10 max-w-2xl font-medium leading-relaxed">
             نرعى صحتكم ونوفر أفضل الخدمات الدوائية لجميع أفراد الأسرة. رعاية طبية متكاملة بلمسة إنسانية.
           </p>
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="grid grid-cols-2 md:flex md:flex-wrap gap-3 md:gap-4 items-center">
             <Button
               size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-8 py-6 h-auto shadow-lg transition-transform hover:scale-105 active:scale-95"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-5 md:px-8 py-5 md:py-6 h-auto shadow-lg transition-transform hover:scale-105 active:scale-95"
               asChild
             >
               <a href="#contact">اطلب الآن</a>
             </Button>
             <Button
               size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-5 md:px-8 py-5 md:py-6 h-auto shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+              asChild
+            >
+              <a href="/products">
+                <ShoppingBag className="w-5 h-5" />
+                تسوق الآن
+              </a>
+            </Button>
+            <Button
+              size="lg"
               variant="outline"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 h-auto transition-transform hover:scale-105 active:scale-95"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary text-base md:text-lg px-5 md:px-8 py-5 md:py-6 h-auto transition-transform hover:scale-105 active:scale-95"
               asChild
             >
               <a href="#branches">فروعنا</a>
@@ -41,7 +52,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 h-auto transition-transform hover:scale-105 active:scale-95"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary text-base md:text-lg px-5 md:px-8 py-5 md:py-6 h-auto transition-transform hover:scale-105 active:scale-95"
               asChild
             >
               <a href="#about">تعرف علينا</a>

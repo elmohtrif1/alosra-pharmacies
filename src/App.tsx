@@ -18,6 +18,7 @@ import { AdminProductForm } from "@/pages/admin/AdminProductForm";
 import { AdminCategories } from "@/pages/admin/AdminCategories";
 import { AdminStaff } from "@/pages/admin/AdminStaff";
 import { AdminRatings } from "@/pages/admin/AdminRatings";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
+          <WhatsAppFloat />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

@@ -70,7 +70,7 @@ export function Contact() {
               </div>
               <div>
                 <p className="text-sm text-blue-200">المقر الرئيسي</p>
-                <p className="text-lg font-medium">مصر، الإسكندرية</p>
+                <p className="text-lg font-medium">مصر،الإسكندرية</p>
               </div>
             </div>
           </div>

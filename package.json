@@ -1,13 +1,17 @@
 {
-  "name": "@workspace/al-osra-pharmacy",
-  "version": "0.0.0",
+  "name": "al-osra-pharmacy",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts",
-    "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "server": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -49,7 +53,9 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.7",
     "embla-carousel-react": "^8.6.0",
+    "express": "^4.21.2",
     "framer-motion": "^12.23.12",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.525.0",
@@ -68,7 +74,6 @@
     "vaul": "^1.1.2",
     "vite": "^7.0.4",
     "wouter": "^3.3.5",
-    "zod": "^3.25.76",
-    "@supabase/supabase-js": "^2.108.2"
+    "zod": "^3.25.76"
   }
 }

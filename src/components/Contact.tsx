@@ -22,7 +22,7 @@ export function Contact() {
         >
           <h3 className="text-3xl font-bold mb-4 text-center">نحن هنا لخدمتك</h3>
           <p className="text-blue-100 text-lg mb-10 leading-relaxed text-center">
-            يسعدنا تواصلك معنا للإجابة على استفساراتك وتلبية احتياجاتك الصحية. فريقنا متاح على مدار الساعة لتقديم الدعم والمشورة.
+            يسعدنا تواصلك معنا للإجابة على استفساراتك وتلبية احتياجاتك الصحية. فريقنا متاح على مدار 24 الساعة لتقديم الدعم والمشورة.
           </p>
 
           <div className="space-y-6">

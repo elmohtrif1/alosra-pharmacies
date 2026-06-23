@@ -4,14 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
+    alias: { "@": path.resolve(__dirname, "src") },
     dedupe: ["react", "react-dom"],
   },
   build: {
@@ -19,7 +14,16 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    host: "0.0.0.0",
     port: 5173,
+    // In local dev, proxy /api to the local Express server (npm run server)
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
+  },
+  preview: {
+    port: 4173,
   },
 });

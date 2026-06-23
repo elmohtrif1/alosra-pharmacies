@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, Trash2, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
 import type { Rating } from "@/types";
 import { AdminLayout } from "./AdminLayout";
 
@@ -11,6 +12,7 @@ type RatingWithProduct = Rating & {
 };
 
 export function AdminRatings() {
+  const { isAdmin } = useAuth();
   const [ratings, setRatings] = useState<RatingWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -49,7 +51,7 @@ export function AdminRatings() {
   useEffect(() => { load(); }, []);
 
   const handleDelete = async (id: string) => {
-    if (!supabase || !confirm("حذف هذا التقييم؟")) return;
+    if (!supabase || !isAdmin || !confirm("حذف هذا التقييم؟")) return;
     await supabase.from("product_ratings").delete().eq("id", id);
     await load();
   };
@@ -65,7 +67,14 @@ export function AdminRatings() {
   return (
     <AdminLayout>
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-black text-slate-800 mb-6">التقييمات</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-black text-slate-800">التقييمات</h1>
+          {!isAdmin && (
+            <span className="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
+              عرض فقط
+            </span>
+          )}
+        </div>
 
         <div className="bg-white rounded-xl border border-slate-100 p-4 mb-4">
           <div className="relative">
@@ -112,12 +121,15 @@ export function AdminRatings() {
                     {r.comment && <p className="text-sm text-slate-600">{r.comment}</p>}
                     <p className="text-xs text-slate-400 mt-1">{new Date(r.created_at).toLocaleDateString("ar-EG")}</p>
                   </div>
-                  <button
-                    onClick={() => handleDelete(r.id)}
-                    className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(r.id)}
+                      className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0"
+                      title="حذف التقييم"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

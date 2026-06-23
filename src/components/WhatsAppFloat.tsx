@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 
-const WHATSAPP_NUMBER = "201275006840";
+const WHATSAPP_NUMBER = "201201247543";
 const WHATSAPP_MESSAGE = encodeURIComponent("مرحباً، أريد الاستفسار عن منتجاتكم");
 
 export function WhatsAppFloat() {

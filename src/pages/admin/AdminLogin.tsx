@@ -80,6 +80,15 @@ export function AdminLogin() {
               </button>
             </div>
           </div>
+          <div className="flex justify-end">
+            <a
+              href="/admin/forgot-password"
+              className="text-xs text-blue-600 hover:text-blue-700 hover:underline"
+              onClick={(e) => { e.preventDefault(); navigate("/admin/forgot-password"); }}
+            >
+              نسيت كلمة المرور؟
+            </a>
+          </div>
           <button
             type="submit"
             disabled={loading}

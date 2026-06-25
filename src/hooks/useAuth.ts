@@ -54,6 +54,10 @@ export function useAuth() {
     setProfile(null);
   };
 
+  const refetch = async () => {
+    if (user) await fetchProfile(user.id);
+  };
+
   return {
     user,
     profile,
@@ -63,5 +67,6 @@ export function useAuth() {
     isStaff: profile?.role === "admin" || profile?.role === "staff",
     signIn,
     signOut,
+    refetch,
   };
 }

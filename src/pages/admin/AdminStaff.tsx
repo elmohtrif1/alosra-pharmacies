@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { UserCog, Trash2, Shield, UserCheck, Plus, X, Eye, EyeOff } from "lucide-react";
+import { Trash2, Shield, UserCheck, Plus, X, Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import type { Profile } from "@/types";
@@ -40,8 +41,13 @@ export function AdminStaff() {
   const handleRoleChange = async (id: string, newRoleVal: "admin" | "staff") => {
     if (!supabase || !isAdmin) return;
     setSaving(id);
-    await supabase.from("profiles").update({ role: newRoleVal }).eq("id", id);
-    await load();
+    const { error } = await supabase.from("profiles").update({ role: newRoleVal }).eq("id", id);
+    if (error) {
+      toast.error("فشل تحديث الصلاحية");
+    } else {
+      toast.success(newRoleVal === "admin" ? "تمت الترقية إلى مدير" : "تم التحويل إلى موظف");
+      await load();
+    }
     setSaving(null);
   };
 
@@ -158,31 +164,34 @@ export function AdminStaff() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold
-                      ${p.role === "admin" ? "bg-violet-100 text-violet-700" : "bg-blue-100 text-blue-700"}`}>
-                      {p.role === "admin" ? <Shield className="w-3 h-3" /> : <UserCheck className="w-3 h-3" />}
-                      {p.role === "admin" ? "مدير" : "موظف"}
-                    </span>
+                    {p.id !== currentProfile?.id ? (
+                      <select
+                        value={p.role}
+                        disabled={saving === p.id}
+                        onChange={(e) => handleRoleChange(p.id, e.target.value as "admin" | "staff")}
+                        className="border border-slate-200 rounded-lg bg-white text-sm text-slate-700 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40 cursor-pointer"
+                        dir="rtl"
+                      >
+                        <option value="admin">مدير</option>
+                        <option value="staff">موظف</option>
+                      </select>
+                    ) : (
+                      <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold
+                        ${p.role === "admin" ? "bg-violet-100 text-violet-700" : "bg-blue-100 text-blue-700"}`}>
+                        {p.role === "admin" ? <Shield className="w-3 h-3" /> : <UserCheck className="w-3 h-3" />}
+                        {p.role === "admin" ? "مدير" : "موظف"}
+                      </span>
+                    )}
 
                     {p.id !== currentProfile?.id && (
-                      <>
-                        <button
-                          onClick={() => handleRoleChange(p.id, p.role === "admin" ? "staff" : "admin")}
-                          disabled={saving === p.id}
-                          className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 disabled:opacity-40"
-                          title={p.role === "admin" ? "تحويل لموظف" : "ترقية لمدير"}
-                        >
-                          <UserCog className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p.id, p.email)}
-                          disabled={saving === p.id}
-                          className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 disabled:opacity-40"
-                          title="إزالة"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </>
+                      <button
+                        onClick={() => handleDelete(p.id, p.email)}
+                        disabled={saving === p.id}
+                        className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 disabled:opacity-40"
+                        title="إزالة"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     )}
                   </div>
                 </li>

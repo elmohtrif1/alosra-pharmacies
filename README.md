@@ -1,27 +1,25 @@
 # صيدليات الأسرة — Al-Osra Pharmacy
 
-A full-stack pharmacy website with a public product catalog, ratings, and a protected admin panel for managing products, categories, ratings, and staff.
+Full-stack pharmacy website with a public product catalog, ratings system, and a protected admin panel for managing products, categories, ratings, and staff.
 
 ## Tech Stack
 
 - **Frontend**: React 18 + Vite + Tailwind CSS v4 + shadcn/ui
-- **Database & Auth**: Supabase (PostgreSQL + Supabase Auth)
+- **Auth & Database**: Supabase (PostgreSQL + Supabase Auth)
 - **Routing**: Wouter
-- **Deployment**: Vercel (frontend + API serverless functions)
+- **Deployment**: Vercel (frontend + serverless API)
 
 ---
 
-## Quick Start
+## Setup After Extracting
 
-### 1. Clone & Install
+### Step 1 — Install dependencies
 
 ```bash
-git clone <your-repo>
-cd al-osra-pharmacy
 npm install
 ```
 
-### 2. Environment Variables
+### Step 2 — Set environment variables
 
 Copy `.env.example` to `.env` and fill in your values:
 
@@ -30,22 +28,23 @@ cp .env.example .env
 ```
 
 | Variable | Where to find it |
-|----------|-----------------|
+|---|---|
 | `VITE_SUPABASE_URL` | Supabase → Project Settings → API → Project URL |
 | `VITE_SUPABASE_ANON_KEY` | Supabase → Project Settings → API → anon key |
-| `SUPABASE_URL` | Same as above (used server-side) |
+| `SUPABASE_URL` | Same as above (server-side) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → service_role key |
+| `VITE_APP_URL` | Your Vercel domain, e.g. `https://yourapp.vercel.app` |
 
-> ⚠️ **Never** expose `SUPABASE_SERVICE_ROLE_KEY` to the browser. It is only used in the `/api` serverless functions.
+> ⚠️ Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser — it's only used by the `/api` serverless functions.
 
-### 3. Set Up the Database
+### Step 3 — Set up the database
 
-Run `MIGRATION.sql` in your Supabase project's SQL Editor (Dashboard → SQL Editor → New query).
+Run `MIGRATION.sql` once in your Supabase SQL Editor (Dashboard → SQL Editor → New query).
 
-After running the migration, create your first admin user:
+Then create your first admin user:
 
 1. Go to **Supabase → Authentication → Users → Add user**
-2. Enter the admin's email and password
+2. Enter the admin email and password
 3. Run this SQL to grant admin role:
 
 ```sql
@@ -53,36 +52,39 @@ UPDATE profiles SET role = 'admin', full_name = 'Your Name'
 WHERE email = 'your-admin@email.com';
 ```
 
-### 4. Run Locally
+### Step 4 — Run locally
 
-**Option A — Frontend only** (no admin user management):
-
+**Frontend only** (no admin user management):
 ```bash
 npm run dev
 ```
 
-**Option B — Frontend + Admin API** (full functionality):
-
+**Frontend + Admin API** (full functionality):
 ```bash
-# Terminal 1: API server
+# Terminal 1
 npm run server
 
-# Terminal 2: Vite dev server (proxies /api → localhost:3001)
+# Terminal 2
 npm run dev
 ```
 
----
+### Step 5 — Build for production
 
-## Deployment on Vercel
+```bash
+npm run build
+```
+
+Output goes to `dist/`.
+
+### Step 6 — Deploy to Vercel
 
 1. Push to GitHub
-2. Import the repo in [vercel.com](https://vercel.com)
-3. Add all environment variables in Vercel → Project → Settings → Environment Variables:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-4. Deploy — Vercel automatically handles the `/api` routes as serverless functions
+2. Import the repo at [vercel.com](https://vercel.com)
+3. Add all environment variables in Vercel → Project → Settings → Environment Variables
+4. Deploy — Vercel automatically serves `/api` routes as serverless functions
+
+> **Important:** Add your reset-password URL to Supabase's allowed redirect list:
+> Supabase → Auth → URL Configuration → Redirect URLs → add `https://yourapp.vercel.app/admin/reset-password`
 
 ---
 
@@ -91,47 +93,48 @@ npm run dev
 ```
 ├── api/
 │   └── admin/
-│       ├── users.js        POST /api/admin/users  (create user)
-│       └── users/
-│           └── [id].js     DELETE /api/admin/users/:id
+│       ├── users.js           POST  /api/admin/users
+│       └── users/[id].js      DELETE /api/admin/users/:id
 ├── src/
-│   ├── components/         Public-facing UI components
-│   ├── components/ui/      shadcn/ui component library
-│   ├── hooks/              Data-fetching hooks (Supabase)
-│   ├── lib/                supabase.ts, utils.ts
+│   ├── components/            Public-facing UI
+│   ├── components/ui/         shadcn/ui component library
+│   ├── hooks/                 useAuth, useProducts, etc.
+│   ├── lib/                   supabase.ts, utils.ts
 │   ├── pages/
-│   │   ├── admin/          Admin panel pages (Login, Dashboard, etc.)
+│   │   ├── admin/
+│   │   │   ├── AdminLogin.tsx
+│   │   │   ├── AdminForgotPassword.tsx
+│   │   │   ├── AdminResetPassword.tsx
+│   │   │   ├── AdminSettings.tsx       ← change name + password
+│   │   │   ├── AdminDashboard.tsx
+│   │   │   ├── AdminProducts.tsx
+│   │   │   ├── AdminCategories.tsx
+│   │   │   ├── AdminStaff.tsx          ← role dropdown
+│   │   │   └── AdminRatings.tsx
 │   │   └── Products.tsx
 │   ├── types/index.ts
 │   └── App.tsx
-├── public/                 Static assets (logo, product images)
-├── server.js               Local dev Express server (not used on Vercel)
-├── MIGRATION.sql           Full DB schema + seed data
-├── BACKUP.sql              Pre-migration backup helper
-├── ROLLBACK.sql            Undo migration
-└── vercel.json             SPA routing + API passthrough
+├── public/
+├── server.js                  Local Express dev server
+├── MIGRATION.sql              Full DB schema + RLS policies + seed data
+├── BACKUP.sql
+├── ROLLBACK.sql
+├── vercel.json
+└── .env.example
 ```
 
 ---
 
-## Admin Panel
+## Admin Routes
 
-URL: `/admin/login`
-
-| Role | Permissions |
-|------|-------------|
-| **Admin** | All: products, categories, ratings, staff, add/delete users |
-| **Staff** | View products, categories, ratings (read-only on ratings) |
-
----
-
-## Required SQL
-
-Run `MIGRATION.sql` once after creating your Supabase project. It creates:
-- `profiles` table (extends Supabase Auth)
-- `categories`, `products`, `product_images` tables
-- `orders`, `order_items` tables
-- Row Level Security policies
-- `handle_new_user()` trigger (auto-creates profile on signup)
-- Storage bucket `product-images`
-- Seed data (6 categories, 14 products)
+| URL | Description |
+|---|---|
+| `/admin/login` | Sign in |
+| `/admin/forgot-password` | Request password reset email |
+| `/admin/reset-password` | Set new password (from email link) |
+| `/admin/dashboard` | Overview stats |
+| `/admin/products` | Product management |
+| `/admin/categories` | Category management |
+| `/admin/ratings` | Ratings moderation |
+| `/admin/staff` | Staff management (admin only) |
+| `/admin/settings` | Change name + password |

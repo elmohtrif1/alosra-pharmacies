@@ -18,6 +18,9 @@ import { AdminProductForm } from "@/pages/admin/AdminProductForm";
 import { AdminCategories } from "@/pages/admin/AdminCategories";
 import { AdminStaff } from "@/pages/admin/AdminStaff";
 import { AdminRatings } from "@/pages/admin/AdminRatings";
+import { AdminForgotPassword } from "@/pages/admin/AdminForgotPassword";
+import { AdminResetPassword } from "@/pages/admin/AdminResetPassword";
+import { AdminSettings } from "@/pages/admin/AdminSettings";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 const queryClient = new QueryClient();
@@ -55,6 +58,9 @@ function Router() {
     <Switch>
       {/* Admin routes */}
       <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/forgot-password" component={AdminForgotPassword} />
+      <Route path="/admin/reset-password" component={AdminResetPassword} />
+      <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/products/new" component={AdminProductForm} />
       <Route path="/admin/products/:id" component={AdminProductForm} />

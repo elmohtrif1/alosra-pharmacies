@@ -32,7 +32,7 @@ export function Contact() {
               </div>
               <div>
                 <p className="text-sm text-blue-200">الهاتف الموحد</p>
-                <a href="tel:012 01247543" className="text-xl font-bold hover:text-white/80 transition-colors" dir="ltr">012 012475435</a>
+                <a href="tel:01201247543" className="text-xl font-bold hover:text-white/80 transition-colors" dir="ltr">01201247543</a>
               </div>
             </div>
 
@@ -43,13 +43,13 @@ export function Contact() {
               <div>
                 <p className="text-sm text-blue-200">واتساب</p>
                 <a
-                  href="https://wa.me/201201247543"
+                  href="https://wa.me/20120124754"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl font-bold hover:text-white/80 transition-colors"
                   dir="ltr"
                 >
-                  +20 12 01247543
+                  +20 12 75006840
                 </a>
               </div>
             </div>

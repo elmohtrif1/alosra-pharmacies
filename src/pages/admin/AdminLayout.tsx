@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import {
-  LayoutDashboard, Package, Tag, Users, Star, LogOut, Menu, X,
+  LayoutDashboard, Package, Tag, Users, Star, LogOut, Menu, X, Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,6 +11,7 @@ const NAV = [
   { href: "/admin/categories", label: "الفئات", icon: Tag },
   { href: "/admin/staff", label: "الموظفون", icon: Users, adminOnly: true },
   { href: "/admin/ratings", label: "التقييمات", icon: Star },
+  { href: "/admin/settings", label: "الإعدادات", icon: Settings },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {

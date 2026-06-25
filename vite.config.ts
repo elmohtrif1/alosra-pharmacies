@@ -15,7 +15,6 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // In local dev, proxy /api to the local Express server (npm run server)
     proxy: {
       "/api": {
         target: "http://localhost:3001",
@@ -23,7 +22,5 @@ export default defineConfig({
       },
     },
   },
-  preview: {
-    port: 4173,
-  },
+  preview: { port: 4173 },
 });

@@ -5,76 +5,76 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useProducts, getPrimaryImage, getCategoryName } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
+import { BranchOrderDialog } from "@/components/BranchOrderDialog";
 import type { Product } from "@/types";
-
-const WHATSAPP_NUMBER = "201275006840";
 
 function ProductCard({ product }: { product: Product }) {
   const [, navigate] = useLocation();
+  const [open, setOpen] = useState(false);
   const image = getPrimaryImage(product);
   const cat = getCategoryName(product);
 
   const waMessage = encodeURIComponent(
     `أريد طلب: ${product.name}${product.sku ? ` - كود المنتج: ${product.sku}` : ""}`
   );
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
 
   return (
-    <div
-      className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 flex flex-col cursor-pointer"
-      onClick={() => navigate(`/products/${product.id}`)}
-    >
-      <div className="relative bg-gray-50 flex items-center justify-center h-44 overflow-hidden">
-        {image ? (
-          <img src={image} alt={product.name} className="h-full w-full object-contain p-3" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <ShoppingCart className="w-12 h-12 text-gray-200" />
+    <>
+      <BranchOrderDialog open={open} setOpen={setOpen} waMessage={waMessage} />
+
+      <div
+        className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 flex flex-col cursor-pointer"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
+        <div className="relative bg-gray-50 flex items-center justify-center h-44 overflow-hidden">
+          {image ? (
+            <img src={image} alt={product.name} className="h-full w-full object-contain p-3" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <ShoppingCart className="w-12 h-12 text-gray-200" />
+            </div>
+          )}
+          {product.badge && (
+            <span className="absolute top-2 right-2 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              {product.badge}
+            </span>
+          )}
+          {product.requires_prescription && (
+            <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              بوصفة طبية
+            </span>
+          )}
+        </div>
+
+        <div className="p-3 flex flex-col flex-1 text-right gap-0.5">
+          {cat && <span className="text-xs text-gray-400">{cat}</span>}
+          {product.brand && <span className="text-xs text-gray-500 font-medium">{product.brand}</span>}
+          <h3 className="font-bold text-gray-800 text-sm leading-snug">{product.name}</h3>
+          <div className="flex items-center gap-1 text-xs mt-1">
+            <span className="text-yellow-500">⭐</span>
+            <span className="font-semibold text-gray-700">
+              {(product.average_rating ?? 0).toFixed(1)}
+            </span>
+            <span className="text-gray-400">({product.rating_count ?? 0})</span>
           </div>
-        )}
-        {product.badge && (
-          <span className="absolute top-2 right-2 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full">
-            {product.badge}
-          </span>
-        )}
-        {product.requires_prescription && (
-          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-            بوصفة طبية
-          </span>
-        )}
-      </div>
-
-      <div className="p-3 flex flex-col flex-1 text-right gap-0.5">
-        {cat && <span className="text-xs text-gray-400">{cat}</span>}
-        {product.brand && <span className="text-xs text-gray-500 font-medium">{product.brand}</span>}
-        <h3 className="font-bold text-gray-800 text-sm leading-snug">{product.name}</h3>
-        <div className="flex items-center gap-1 text-xs mt-1">
-  <span className="text-yellow-500">⭐</span>
-
-  <span className="font-semibold text-gray-700">
-    {(product.average_rating ?? 0).toFixed(1)}
-  </span>
-
-  <span className="text-gray-400">
-     ({product.rating_count ?? 0})
-   </span>
-  </div>
-        {product.unit && <span className="text-xs text-gray-400">{product.unit}</span>}
-        <div className="flex items-center justify-between mt-2">
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1 bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-accent/90 transition-colors"
-          >
-            <ShoppingCart className="w-3 h-3" />
-            اطلب
-          </a>
-          <span className="font-black text-accent text-base">{product.price} ج.م</span>
+          {product.unit && <span className="text-xs text-gray-400">{product.unit}</span>}
+          <div className="flex items-center justify-between mt-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(true);
+              }}
+              className="flex items-center gap-1 bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-accent/90 transition-colors"
+            >
+              <ShoppingCart className="w-3 h-3" />
+              اطلب
+            </button>
+            <span className="font-black text-accent text-base">{product.price} ج.م</span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

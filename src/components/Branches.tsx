@@ -4,7 +4,7 @@ import { SiWhatsapp } from "react-icons/si";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-const branches = [
+export const branches = [
   {
     city: "فرع ابو سليمان",
     hours: "مفتوح 24 ساعة",
@@ -42,7 +42,7 @@ const branches = [
   },
 ];
 
-function toWhatsAppNumber(phone: string): string {
+export function toWhatsAppNumber(phone: string): string {
   const digits = phone.replace(/[\s+\-()]/g, "");
   if (digits.startsWith("20")) return digits;
   if (digits.startsWith("0")) return "20" + digits.slice(1);

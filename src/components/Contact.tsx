@@ -43,13 +43,13 @@ export function Contact() {
               <div>
                 <p className="text-sm text-blue-200">واتساب</p>
                 <a
-                  href="https://wa.me/20120124754"
+                  href="https://wa.me/201201247543"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl font-bold hover:text-white/80 transition-colors"
                   dir="ltr"
                 >
-                  +20 12 75006840
+                  +20 12 01247543
                 </a>
               </div>
             </div>

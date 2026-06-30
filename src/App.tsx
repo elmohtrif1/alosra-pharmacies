@@ -22,6 +22,7 @@ import { AdminForgotPassword } from "@/pages/admin/AdminForgotPassword";
 import { AdminResetPassword } from "@/pages/admin/AdminResetPassword";
 import { AdminSettings } from "@/pages/admin/AdminSettings";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,7 @@ function App() {
           <WhatsAppFloat />
         </WouterRouter>
         <Toaster />
+        <SpeedInsights />
       </TooltipProvider>
     </QueryClientProvider>
   );

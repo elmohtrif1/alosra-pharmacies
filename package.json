@@ -11,7 +11,8 @@
     "server": "node server.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.108.2"
+    "@supabase/supabase-js": "^2.108.2",
+    "@vercel/analytics": "^2.0.1"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",
